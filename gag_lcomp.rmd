@@ -1,0 +1,320 @@
+2014 Gag Assessment Update - Commercial Length Composition
+========================================================
+
+The SEDAR 10 gag data workshop developed commercial length compostions for handline, longline, trawl, and diving gear.  The contribution of each length was weighted by the landings in number associated by state and year.   The minimal longline and trawl compositions were combined with handline using sample size as a weighting factor.
+
+The 2014 gag update assessment uses a slightly modified approach.  For each gear, state-specific length compositions were developed and then multiplied by the relative contibution of that state's landings to the total Southeast commercial landings for.  The weighting unit was pounds instead of numbers to 1) elimate the need to convert using mean weights, and 2) allow use of the unit in which the data were collected.  Each state had to measure at least 10 fish in a year to be included in the length composition.
+
+The 2010 shallow water spawning closure eliminated collections of lengths for January-April for all areas.  
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+######################################################################
+# gag 2014 update assessment length composition
+# R. Cheshire 1/21/2014,  last edit 2/4/2014
+
+######################################################################
+######code to add years to comps....insert later
+# rnames=as.numeric(rownames(hl.norm.unw))
+# hl.norm.unw=cbind(rnames,hl.norm.unw)
+# colnames(hl.norm.unw)[1]='year'
+setwd("W:\\SEDAR\\Updates2014\\Gag\\Comps\\Commercial")
+require(doBy)
+require(xtable)
+# define sample size cutoff (state-specific sample size cutoff for weighting comps)
+st.cutoff=30
+yr.cutoff=100  #annual number of fish
+#import data sets
+tip=read.csv('gag_tip_sa.csv',header=TRUE)
+hl.state.land=read.csv(file='hl.stateppt.csv',header=TRUE)#temporary until landings are received
+dv.state.land=read.csv(file='dv.stateppt.csv',header=TRUE)#temporary until landings are received
+#remove unwanted columns
+tip=tip[,c(1,3,7,8,9,11)]
+#rename variables
+names(tip)=c('state','year','lentype','length','num','gear')
+#remove records without units defined
+tip=tip[tip$lentype!="",]
+#convert to total length
+sl=function(x){x=1.1908*x}  # conversions from sedar 10 workbook
+fl=function(x){x=1.0341*x}
+tip$tlmm[tip$lentype=="FORK LENGTH"]=fl(tip$length)
+tip$tlmm[tip$lentype=="STANDARD LENGTH"]=sl(tip$length[tip$lentype=="STANDARD LENGTH"])
+tip$tlmm[tip$lentype=="TOTAL LENGTH"]=tip$length[tip$lentype=="TOTAL LENGTH"]
+#convert to 1 cm bins
+rnd = function(x) trunc(x+0.5) #define round function (r's version of round is not typical US version)
+tip$tlcm=rnd(tip$tlmm/10)
+tip=tip[tip$tlcm<=145,] #as defined in SEDAR10-DW-14, removes 3 records
+tip=tip[tip$tlcm>29.4,] #as defined by SEDAR10_SAR1_SA_Gag, removes 15 records
+#define gears
+gears=levels(as.factor(tip$gear))
+#the following gear index values need to be updated for each species/data set
+gear_hl=gears[c(4,5,6,7,9,12,13,14,15)]
+#[1] "LINES HAND"                    "LINES LONG SET WITH HOOKS"    
+#[3] "LINES LONG, REEF FISH"         "LINES POWER TROLL OTHER"      
+#[5] "OTTER TRAWL BOTTOM, FISH"      "REEL, ELECTRIC OR HYDRAULIC"  
+#[7] "REEL, MANUAL"                  "ROD AND REEL"                 
+#[9] "ROD AND REEL, ELECTRIC (HAND)"
+gear_dv=gears[c(2,16)]  #[1] "BY HAND, DIVING GEAR" "SPEARS" 
+#gears not included: vertical buoy gear, cast nets, not coded, 
+#     pots and traps (fish), pots and traps (include,
+
+#split data to gears
+tip.hl=tip[tip$gear%in%gear_hl,]
+tip.dv=tip[tip$gear%in%gear_dv,]
+#cleanup
+tip.hl=tip.hl[,c(1,2,5,8)]
+tip.dv=tip.dv[,c(1,2,5,8)]
+#convert to 3cm bins from 29 to 122 cm #############trickery
+lenbins=seq(29,122,by=3)
+tip.hl$tl3cm[tip.hl$tlcm%in%lenbins]=tip.hl$tlcm[tip.hl$tlcm%in%lenbins]
+temp.tl=tip.hl$tlcm+1
+tip.hl$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+temp.tl=tip.hl$tlcm-1
+tip.hl$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+#diving
+tip.dv$tl3cm[tip.dv$tlcm%in%lenbins]=tip.dv$tlcm[tip.dv$tlcm%in%lenbins]
+temp.tl=tip.dv$tlcm+1
+tip.dv$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+temp.tl=tip.dv$tlcm-1
+tip.dv$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+
+# add zeros for missing combinations of year, state, and length bin
+#handline
+x=levels(as.factor(tip.hl$state))
+y=min(tip.hl$year):max(tip.hl$year)
+z=seq(min(tip.hl$tl3cm,na.rm=TRUE),max(tip.hl$tl3cm,na.rm=TRUE),by=3)
+a=expand.grid(x=x,y=y,z=z)
+colnames(a)=c('state','year','tl3cm')
+tip.hl=merge(a,tip.hl,by=c('state','year','tl3cm'),all=TRUE)
+tip.hl$num[is.na(tip.hl$num)==TRUE] = 0
+
+#diving
+x=levels(as.factor(tip.dv$state))
+y=as.numeric(levels(as.factor(tip.dv$year)))  
+z=seq(29,122,by=3)   #hardcode max and min to match handline
+a=expand.grid(x=x,y=y,z=z)
+colnames(a)=c('state','year','tl3cm')
+tip.dv=merge(a,tip.dv,by=c('state','year','tl3cm'),all=TRUE)
+tip.dv$num[is.na(tip.dv$num)==TRUE] = 0
+
+
+###add sample size tables here
+############ Handline #############
+############################
+###begin unweighted length comp - handline
+hl.unw=summaryBy(num~year+tl3cm,data=tip.hl,FUN=sum)
+hl.unw.tab=xtabs(num.sum~year+tl3cm,data=hl.unw)
+hl.nfish=rowSums(hl.unw.tab)+0.0000001
+for(i in 1:length(hl.nfish)){
+  if (hl.nfish[i]>st.cutoff){hl.nfish[i]=hl.nfish[i]
+                         } else{hl.nfish[i]=0.0000001;hl.unw.tab[i,]=0}
+  }
+hl.norm.unw=hl.unw.tab/hl.nfish
+
+############ Diving #############
+############################
+###begin unweighted length comp - diving
+dv.unw=summaryBy(num~year+tl3cm,data=tip.dv,FUN=sum)
+dv.unw.tab=xtabs(num.sum~year+tl3cm,data=dv.unw)
+dv.nfish=rowSums(dv.unw.tab)+0.0000001
+for(i in 1:length(dv.nfish)){
+  if (dv.nfish[i]>st.cutoff){dv.nfish[i]=dv.nfish[i]
+                         } else{dv.nfish[i]=0.0000001;dv.unw.tab[i,]=0}
+  }
+dv.norm.unw=dv.unw.tab/dv.nfish
+
+############# STATE-SPECIFIC COMPS
+#north carolina handline
+nc.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='NC',],FUN=sum)
+nc.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=nc.hl.unw)
+nc.hl.unw.tab=as.data.frame.matrix(nc.hl.unw.tab)
+nc.hl.nfish=rowSums(nc.hl.unw.tab)
+for(i in 1:length(nc.hl.nfish)){
+  if (nc.hl.nfish[i]>st.cutoff){nc.hl.nfish[i]=nc.hl.nfish[i]
+                         } else{nc.hl.nfish[i]=0;nc.hl.unw.tab[i,]=0}
+  }
+nc.hl.norm.unw=nc.hl.unw.tab/(nc.hl.nfish+0.00000001)
+nc.hl.w=nc.hl.norm.unw*hl.state.land[,2]
+
+#north carolina diving
+nc.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='NC',],FUN=sum)
+nc.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=nc.dv.unw)
+nc.dv.unw.tab=as.data.frame.matrix(nc.dv.unw.tab)
+nc.dv.nfish=rowSums(nc.dv.unw.tab)
+for(i in 1:length(nc.dv.nfish)){
+  if (nc.dv.nfish[i]>st.cutoff){nc.dv.nfish[i]=nc.dv.nfish[i]
+                         } else{nc.dv.nfish[i]=0;nc.dv.unw.tab[i,]=0}
+  }
+nc.dv.norm.unw=nc.dv.unw.tab/(nc.dv.nfish+0.00000001)
+nc.dv.w=nc.dv.norm.unw*dv.state.land[,2]
+
+
+#south carolina handline
+sc.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='SC',],FUN=sum)
+sc.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=sc.hl.unw)
+sc.hl.unw.tab=as.data.frame.matrix(sc.hl.unw.tab)
+sc.hl.nfish=rowSums(sc.hl.unw.tab)
+for(i in 1:length(sc.hl.nfish)){
+  if (sc.hl.nfish[i]>st.cutoff){sc.hl.nfish[i]=sc.hl.nfish[i]
+                         } else{sc.hl.nfish[i]=0;sc.hl.unw.tab[i,]=0}
+  }
+sc.hl.norm.unw=sc.hl.unw.tab/(sc.hl.nfish+0.00000001)
+sc.hl.w=sc.hl.norm.unw*hl.state.land[,3]
+
+#south carolina diving
+sc.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='SC',],FUN=sum)
+sc.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=sc.dv.unw)
+sc.dv.unw.tab=as.data.frame.matrix(sc.dv.unw.tab)
+sc.dv.nfish=rowSums(sc.dv.unw.tab)
+for(i in 1:length(sc.dv.nfish)){
+  if (sc.dv.nfish[i]>st.cutoff){sc.dv.nfish[i]=sc.dv.nfish[i]
+                         } else{sc.dv.nfish[i]=0;sc.dv.unw.tab[i,]=0}
+  }
+sc.dv.norm.unw=sc.dv.unw.tab/(sc.dv.nfish+0.00000001)
+sc.dv.w=sc.dv.norm.unw*dv.state.land[,3]
+
+#georgia handline (no data after 2005)
+ga.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='GA',],FUN=sum)
+ga.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=ga.hl.unw)
+ga.hl.unw.tab=as.data.frame.matrix(ga.hl.unw.tab)
+ga.hl.nfish=rowSums(ga.hl.unw.tab)
+for(i in 1:length(ga.hl.nfish)){
+  if (ga.hl.nfish[i]>st.cutoff){ga.hl.nfish[i]=ga.hl.nfish[i]
+                         } else{ga.hl.nfish[i]=0;ga.hl.unw.tab[i,]=0}
+  }
+ga.hl.norm.unw=ga.hl.unw.tab/(ga.hl.nfish+0.00000001)
+ga.hl.w=ga.hl.norm.unw*hl.state.land[,4]
+
+#georgia diving
+ga.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='GA',],FUN=sum)
+ga.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=ga.dv.unw)
+ga.dv.unw.tab=as.data.frame.matrix(ga.dv.unw.tab)
+ga.dv.nfish=rowSums(ga.dv.unw.tab)
+for(i in 1:length(ga.dv.nfish)){
+  if (ga.dv.nfish[i]>st.cutoff){ga.dv.nfish[i]=ga.dv.nfish[i]
+                         } else{ga.dv.nfish[i]=0;ga.dv.unw.tab[i,]=0}
+  }
+ga.dv.norm.unw=ga.dv.unw.tab/(ga.dv.nfish+0.00000001)
+ga.dv.w=ga.dv.norm.unw*dv.state.land[,4]
+
+#florida handline 
+fl.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='FL',],FUN=sum)
+fl.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.hl.unw)
+fl.hl.unw.tab=as.data.frame.matrix(fl.hl.unw.tab)
+fl.hl.nfish=rowSums(fl.hl.unw.tab)
+for(i in 1:length(fl.hl.nfish)){
+  if (fl.hl.nfish[i]>st.cutoff){fl.hl.nfish[i]=fl.hl.nfish[i]
+                         } else{fl.hl.nfish[i]=0;fl.hl.unw.tab[i,]=0}
+  }
+fl.hl.norm.unw=fl.hl.unw.tab/(fl.hl.nfish+0.0000001)
+fl.hl.w=fl.hl.norm.unw*hl.state.land[,5]
+
+#florida diving
+fl.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='FL',],FUN=sum)
+fl.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.dv.unw)
+fl.dv.unw.tab=as.data.frame.matrix(fl.dv.unw.tab)
+fl.dv.nfish=rowSums(fl.dv.unw.tab)
+for(i in 1:length(fl.dv.nfish)){
+  if (fl.dv.nfish[i]>st.cutoff){fl.dv.nfish[i]=fl.dv.nfish[i]
+                         } else{fl.dv.nfish[i]=0;fl.dv.unw.tab[i,]=0}
+  }
+fl.dv.norm.unw=fl.dv.unw.tab/(fl.dv.nfish+0.00000001)
+fl.dv.w=fl.dv.norm.unw*dv.state.land[,5]
+
+#combine state comps
+#handline
+hl.w=nc.hl.w+sc.hl.w+ga.hl.w+fl.hl.w
+hl.norm.w=hl.w/rowSums(hl.w+0.0000001)
+hl.norm.w.trim=hl.norm.w[rowSums(hl.norm.w)>0,]
+hl.norm.unw.trim=hl.norm.unw[rowSums(hl.norm.w)>0,]
+
+#diving
+dv.w=nc.dv.w+sc.dv.w+ga.dv.w+fl.dv.w
+dv.norm.w=dv.w/rowSums(dv.w+0.0000001)
+dv.norm.w.trim=dv.norm.w[rowSums(dv.norm.w)>0,]
+dv.norm.unw.trim=dv.norm.unw[rowSums(dv.norm.w)>0,]
+
+#trim state comps to match combined comps for plotting
+#handline
+nc.hl.w.trim=nc.hl.w[rowSums(hl.norm.w)>0,]
+sc.hl.w.trim=sc.hl.w[rowSums(hl.norm.w)>0,]
+ga.hl.w.trim=ga.hl.w[rowSums(hl.norm.w)>0,]
+fl.hl.w.trim=fl.hl.w[rowSums(hl.norm.w)>0,]
+#diving
+nc.dv.w.trim=nc.dv.w[rowSums(dv.norm.w)>0,]
+sc.dv.w.trim=sc.dv.w[rowSums(dv.norm.w)>0,]
+ga.dv.w.trim=ga.dv.w[rowSums(dv.norm.w)>0,]
+fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
+
+
+
+
+###############end of comp weighting
+
+#create sample size tables
+#handlinernames=as.numeric(row.names(hl.norm.unw))
+hl.ss=cbind(nc.hl.nfish,sc.hl.nfish,ga.hl.nfish,fl.hl.nfish)
+colnames(hl.ss)=c('NC','SC','GA','FL')
+
+dv.ss=cbind(nc.dv.nfish,sc.dv.nfish,ga.dv.nfish,fl.dv.nfish)
+colnames(dv.ss)=c('NC','SC','GA','FL')
+#diving
+```
+Tables
+-------------------------
+**Table 1.**  Commercial Handline sample size by state (number of fish).
+```{r,results='asis',echo=FALSE}
+table1=xtable(hl.ss,digits=0)
+print(table1,type="html")
+```
+**Table 2.**  Commercial Diving sample size by state (number of fish).
+```{r,results='asis',echo=FALSE}
+table1=xtable(dv.ss,digits=0)
+print(table1,type="html")
+```
+
+**Table 3.**  Commercial Handline weighted length composition.
+```{r,results='asis',echo=FALSE}
+table1=xtable(hl.norm.w.trim,digits=4)
+print(table1,type="html")
+```
+
+**Table 4.**  Commercial divin weighted length composition.
+```{r,results='asis',echo=FALSE}
+table1=xtable(dv.norm.w.trim,digits=4)
+print(table1,type="html")
+```
+Figures
+-------------------------
+**Figure 1.**  Commercial Handline Length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
+```{r ,echo=FALSE}
+year=as.numeric(rownames(hl.norm.w.trim))
+for(i in 1:dim(hl.norm.w.trim)[1]){
+plot(lenbins,hl.norm.w.trim[i,],type='n',ylim=c(0,max(hl.norm.w.trim)),ylab='',xlab='TL (cm)')
+text(35,max(hl.norm.w.trim),paste(year[i],'Handline',sep='-'))
+if(year[i]>=1992){abline(v=50.8)}
+lines(lenbins,hl.norm.w.trim[i,],lwd=2)
+lines(lenbins,hl.norm.unw.trim[i,],lty=3,lwd=2)
+lines(lenbins,nc.hl.w.trim[i,],lty=3,lwd=2,col="green")
+lines(lenbins,sc.hl.w.trim[i,],lty=3,lwd=2,col="blue")
+lines(lenbins,ga.hl.w.trim[i,],lty=3,lwd=2,col="orange")
+lines(lenbins,fl.hl.w.trim[i,],lty=3,lwd=2,col="red")
+legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','green','blue','orange','red'),legend=c('weighted','unweighted','NC','SC','GA','FL'))
+}
+```
+
+**Figure 2.**  Commercial diving length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
+```{r, echo=FALSE}
+year=as.numeric(rownames(dv.norm.w.trim))
+for(i in 1:dim(dv.norm.w.trim)[1]){
+plot(lenbins,dv.norm.w.trim[i,],type='n',ylim=c(0,max(dv.norm.w.trim)),ylab='',xlab='TL (cm)')
+text(35,max(dv.norm.w.trim),paste(year[i],'Diving',sep='-'))
+if(year[i]>=1992){abline(v=50.8)}
+lines(lenbins,dv.norm.w.trim[i,],lwd=2)
+lines(lenbins,dv.norm.unw.trim[i,],lty=3,lwd=2)
+lines(lenbins,nc.dv.w.trim[i,],lty=3,lwd=2,col="green")
+lines(lenbins,sc.dv.w.trim[i,],lty=3,lwd=2,col="blue")
+lines(lenbins,ga.dv.w.trim[i,],lty=3,lwd=2,col="orange")
+lines(lenbins,fl.dv.w.trim[i,],lty=3,lwd=2,col="red")
+legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','green','blue','orange','red'),legend=c('weighted','unweighted','NC','SC','GA','FL'))
+}
+```
