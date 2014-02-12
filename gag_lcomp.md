@@ -13,7 +13,7 @@ Tables
 -------------------------
 **Table 1.**  Commercial Handline sample size by state (number of fish).
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Wed Feb 12 14:13:18 2014 -->
+<!-- Wed Feb 12 14:24:56 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GA </TH> <TH> FL </TH>  </TR>
   <TR> <TD align="right"> 1983 </TD> <TD align="right"> 116 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
@@ -51,7 +51,7 @@ Tables
 
 **Table 2.**  Commercial Diving sample size by state (number of fish).
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Wed Feb 12 14:13:18 2014 -->
+<!-- Wed Feb 12 14:24:56 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GA </TH> <TH> FL </TH>  </TR>
   <TR> <TD align="right"> 1987 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
@@ -83,7 +83,7 @@ Tables
 
 **Table 3.**  Commercial Handline weighted length composition.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Wed Feb 12 14:13:18 2014 -->
+<!-- Wed Feb 12 14:24:56 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 29 </TH> <TH> 32 </TH> <TH> 35 </TH> <TH> 38 </TH> <TH> 41 </TH> <TH> 44 </TH> <TH> 47 </TH> <TH> 50 </TH> <TH> 53 </TH> <TH> 56 </TH> <TH> 59 </TH> <TH> 62 </TH> <TH> 65 </TH> <TH> 68 </TH> <TH> 71 </TH> <TH> 74 </TH> <TH> 77 </TH> <TH> 80 </TH> <TH> 83 </TH> <TH> 86 </TH> <TH> 89 </TH> <TH> 92 </TH> <TH> 95 </TH> <TH> 98 </TH> <TH> 101 </TH> <TH> 104 </TH> <TH> 107 </TH> <TH> 110 </TH> <TH> 113 </TH> <TH> 116 </TH> <TH> 119 </TH> <TH> 122 </TH>  </TR>
   <TR> <TD align="right"> 1983 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0259 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0172 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0517 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0603 </TD> <TD align="right"> 0.0690 </TD> <TD align="right"> 0.1034 </TD> <TD align="right"> 0.0690 </TD> <TD align="right"> 0.0776 </TD> <TD align="right"> 0.0517 </TD> <TD align="right"> 0.0603 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0172 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -122,7 +122,7 @@ Tables
 
 **Table 4.**  Commercial divin weighted length composition.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Wed Feb 12 14:13:18 2014 -->
+<!-- Wed Feb 12 14:24:57 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 29 </TH> <TH> 32 </TH> <TH> 35 </TH> <TH> 38 </TH> <TH> 41 </TH> <TH> 44 </TH> <TH> 47 </TH> <TH> 50 </TH> <TH> 53 </TH> <TH> 56 </TH> <TH> 59 </TH> <TH> 62 </TH> <TH> 65 </TH> <TH> 68 </TH> <TH> 71 </TH> <TH> 74 </TH> <TH> 77 </TH> <TH> 80 </TH> <TH> 83 </TH> <TH> 86 </TH> <TH> 89 </TH> <TH> 92 </TH> <TH> 95 </TH> <TH> 98 </TH> <TH> 101 </TH> <TH> 104 </TH> <TH> 107 </TH> <TH> 110 </TH> <TH> 113 </TH> <TH> 116 </TH> <TH> 119 </TH> <TH> 122 </TH>  </TR>
   <TR> <TD align="right"> 1996 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0154 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0154 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0308 </TD> <TD align="right"> 0.0769 </TD> <TD align="right"> 0.0154 </TD> <TD align="right"> 0.1692 </TD> <TD align="right"> 0.2615 </TD> <TD align="right"> 0.1538 </TD> <TD align="right"> 0.1692 </TD> <TD align="right"> 0.0615 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0154 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0154 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> </TR>

@@ -18,6 +18,7 @@ The 2010 shallow water spawning closure eliminated collections of lengths for Ja
 # hl.norm.unw=cbind(rnames,hl.norm.unw)
 # colnames(hl.norm.unw)[1]='year'
 setwd("W:\\SEDAR\\Updates2014\\Gag\\Comps\\Commercial")
+#W:\SEDAR\Updates2014\Gag\Comps\Commercial\2014GagCommLcomp\2014GagCommComp
 require(doBy)
 require(xtable)
 # define sample size cutoff (state-specific sample size cutoff for weighting comps)
