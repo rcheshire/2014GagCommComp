@@ -11,7 +11,7 @@ The 2010 shallow water spawning closure eliminated collections of lengths for Ja
 ######################################################################
 # gag 2014 update assessment length composition
 # R. Cheshire 1/21/2014,  last edit 2/4/2014
-
+#######warning, to do: modify pooling  over upper and lower values
 ######################################################################
 ######code to add years to comps....insert later
 # rnames=as.numeric(rownames(hl.norm.unw))
@@ -22,8 +22,8 @@ setwd("W:\\SEDAR\\Updates2014\\Gag\\Comps\\Commercial")
 require(doBy)
 require(xtable)
 # define sample size cutoff (state-specific sample size cutoff for weighting comps)
-st.cutoff=30
-yr.cutoff=100  #annual number of fish
+st.cutoff=0
+yr.cutoff=100  #annual number of fish ---not implemented yet
 #import data sets
 tip=read.csv('gag_tip_sa.csv',header=TRUE)
 hl.state.land=read.csv(file='hl.stateppt.csv',header=TRUE)#temporary until landings are received
