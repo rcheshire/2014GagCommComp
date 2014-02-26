@@ -1,13 +1,13 @@
-2014 Gag Assessment Update - Commercial Length Composition
+2014 Gag Assessment Update - Commercial Length and Age Composition
 ========================================================
-
+**Length Composition**
 The SEDAR 10 gag data workshop developed commercial length compostions for handline, longline, trawl, and diving gear.  The contribution of each length was weighted by the landings in number associated by state and year.   The minimal longline and trawl compositions were combined with handline using sample size as a weighting factor.
 
 The 2014 gag update assessment uses a slightly modified approach.  For each gear, state-specific length compositions were developed and then multiplied by the relative contibution of that state's landings to the total Southeast commercial landings for.  The weighting unit was pounds instead of numbers to 1) elimate the need to convert using mean weights, and 2) allow use of the unit in which the data were collected.  Each state had to measure at least 10 fish in a year to be included in the length composition.
 
 The 2010 shallow water spawning closure eliminated collections of lengths for January-April for all areas.  
 
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
+```{r lendataprep,echo=FALSE,message=FALSE,warning=FALSE}
 ######################################################################
 # gag 2014 update assessment length composition
 # R. Cheshire 1/21/2014,  last edit 2/4/2014
@@ -21,6 +21,7 @@ setwd("W:\\SEDAR\\Updates2014\\Gag\\Comps\\Commercial")
 #W:\SEDAR\Updates2014\Gag\Comps\Commercial\2014GagCommLcomp\2014GagCommComp
 require(doBy)
 require(xtable)
+library(reshape2)
 # define sample size cutoff (state-specific sample size cutoff for weighting comps)
 st.cutoff=0
 yr.cutoff=100  #annual number of fish ---not implemented yet
@@ -45,6 +46,10 @@ rnd = function(x) trunc(x+0.5) #define round function (r's version of round is n
 tip$tlcm=rnd(tip$tlmm/10)
 tip=tip[tip$tlcm<=145,] #as defined in SEDAR10-DW-14, removes 3 records
 tip=tip[tip$tlcm>29.4,] #as defined by SEDAR10_SAR1_SA_Gag, removes 15 records
+#redefine pooled values
+tip$tlcm[tip$tlcm<29]=29 #lower 
+tip$tlcm[tip$tlcm>122]=122 #upper 
+tip=tip[tip$year<2013,]
 #define gears
 gears=levels(as.factor(tip$gear))
 #the following gear index values need to be updated for each species/data set
@@ -254,40 +259,44 @@ fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
 #create sample size tables
 #handlinernames=as.numeric(row.names(hl.norm.unw))
 hl.ss=cbind(nc.hl.nfish,sc.hl.nfish,ga.hl.nfish,fl.hl.nfish)
-colnames(hl.ss)=c('NC','SC','GA','FL')
+hl.ss=as.data.frame.matrix(hl.ss)
+hl.ss$total=rowSums(hl.ss)
+colnames(hl.ss)=c('NC','SC','GA','FL','Total')
 
 dv.ss=cbind(nc.dv.nfish,sc.dv.nfish,ga.dv.nfish,fl.dv.nfish)
-colnames(dv.ss)=c('NC','SC','GA','FL')
+dv.ss=as.data.frame.matrix(dv.ss)
+dv.ss$total=rowSums(dv.ss)
+colnames(dv.ss)=c('NC','SC','GA','FL','Total')
 #diving
 ```
 Tables
 -------------------------
 **Table 1.**  Commercial Handline sample size by state (number of fish).
-```{r,results='asis',echo=FALSE}
+```{r commhlss,results='asis',echo=FALSE}
 table1=xtable(hl.ss,digits=0)
 print(table1,type="html")
 ```
 **Table 2.**  Commercial Diving sample size by state (number of fish).
-```{r,results='asis',echo=FALSE}
+```{r commdvss,results='asis',echo=FALSE}
 table1=xtable(dv.ss,digits=0)
 print(table1,type="html")
 ```
 
 **Table 3.**  Commercial Handline weighted length composition.
-```{r,results='asis',echo=FALSE}
+```{r commhlwlcomp,results='asis',echo=FALSE}
 table1=xtable(hl.norm.w.trim,digits=4)
 print(table1,type="html")
 ```
 
-**Table 4.**  Commercial divin weighted length composition.
-```{r,results='asis',echo=FALSE}
+**Table 4.**  Commercial diving weighted length composition.
+```{r commdvwlcomp,results='asis',echo=FALSE}
 table1=xtable(dv.norm.w.trim,digits=4)
 print(table1,type="html")
 ```
 Figures
 -------------------------
 **Figure 1.**  Commercial Handline Length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
-```{r ,echo=FALSE}
+```{r  commhlplots,echo=FALSE}
 year=as.numeric(rownames(hl.norm.w.trim))
 for(i in 1:dim(hl.norm.w.trim)[1]){
 plot(lenbins,hl.norm.w.trim[i,],type='n',ylim=c(0,max(hl.norm.w.trim)),ylab='',xlab='TL (cm)')
@@ -304,7 +313,7 @@ legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','g
 ```
 
 **Figure 2.**  Commercial diving length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
-```{r, echo=FALSE}
+```{r commdvplots, echo=FALSE}
 year=as.numeric(rownames(dv.norm.w.trim))
 for(i in 1:dim(dv.norm.w.trim)[1]){
 plot(lenbins,dv.norm.w.trim[i,],type='n',ylim=c(0,max(dv.norm.w.trim)),ylab='',xlab='TL (cm)')
@@ -319,3 +328,171 @@ lines(lenbins,fl.dv.w.trim[i,],lty=3,lwd=2,col="red")
 legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','green','blue','orange','red'),legend=c('weighted','unweighted','NC','SC','GA','FL'))
 }
 ```
+**Age Composition**
+Describe Chih method here....
+```{r agedataprep,echo=FALSE,message=FALSE,warning=FALSE}
+age.dat=read.csv(file='W:/SEDAR/Updates2014/Gag/Comps/Commercial/gag_ages_rinput.csv',header=TRUE)
+#remove unused cols
+age.dat=age.dat[,c(-1,-2)]
+names(age.dat)=c('gear','tlmm','age','month','year','state')
+age.dat$tlcm=rnd(age.dat$tlmm/10)
+#convert upper and lower pooled values to 29 and 122 cm
+age.dat$tlcm[age.dat$tlcm<29]=29 #lower (3 records for dat, none for dv)
+age.dat$tlcm[age.dat$tlcm>122]=122 #upper (3 records for dat, none for dv)
+age.hl=age.dat[age.dat$gear%in%c('HL','TWL','LL'),]
+age.dv=age.dat[age.dat$gear%in%c('DV'),]
+
+#convert to 3cm bins from 29 to 122 cm #############trickery
+lenbins=seq(29,122,by=3)
+#handline
+age.hl$tl3cm[age.hl$tlcm%in%lenbins]=age.hl$tlcm[age.hl$tlcm%in%lenbins]
+temp.tl=age.hl$tlcm+1
+age.hl$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+temp.tl=age.hl$tlcm-1
+age.hl$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+#diving
+#convert to 3cm bins from 29 to 122 cm #############trickery
+lenbins=seq(29,122,by=3)
+age.dv$tl3cm[age.dv$tlcm%in%lenbins]=age.dv$tlcm[age.dv$tlcm%in%lenbins]
+temp.tl=age.dv$tlcm+1
+age.dv$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+temp.tl=age.dv$tlcm-1
+age.dv$tl3cm[temp.tl%in%lenbins]=temp.tl[temp.tl%in%lenbins]
+############## handline #################
+# add zeros for missing combinations of state and length bin
+#handline
+y=min(age.hl$year):max(age.hl$year)
+z=seq(min(age.hl$tl3cm,na.rm=TRUE),max(age.hl$tl3cm,na.rm=TRUE),by=3)
+a=expand.grid(y=y,z=z)
+colnames(a)=c('year','tl3cm')
+age.hl.all=merge(a,age.hl,by=c('year','tl3cm'),all=TRUE)
+age.hl.all$num=1
+age.hl.all$num[is.na(age.hl.all$age)==TRUE] = 0
+
+
+#length comp of aged fish (so that lcomp of aged fish can be compared to lcomp)
+hl.lcompaged=summaryBy(num~year+tl3cm,data=age.hl.all,FUN=sum)
+hl.lcompaged.tab=xtabs(num.sum~year+tl3cm,data=hl.lcompaged)
+hl.lcompaged.nfish=rowSums(hl.lcompaged.tab)+0.0000001
+for(i in 1:length(hl.lcompaged.nfish)){
+  if (hl.lcompaged.nfish[i]>st.cutoff){hl.lcompaged.nfish[i]=hl.lcompaged.nfish[i]
+  } else{hl.lcompaged.nfish[i]=0.0000001;hl.lcompaged.tab[i,]=0}
+}
+hl.lcompaged.norm=hl.lcompaged.tab/hl.lcompaged.nfish
+########## hl age comp 
+#create num column for each age bin
+age.hl.num=summaryBy(age~year+age,data=age.hl,FUN=length)
+age.hl.num$numage=age.hl.num$age.length
+
+# add zeros for missing combinations of year and age
+y=min(age.hl$year):max(age.hl$year)
+z=seq(min(age.hl$age,na.rm=TRUE),max(age.hl$age,na.rm=TRUE),by=1)
+a=expand.grid(y=y,z=z)
+colnames(a)=c('year','age')
+age.hl.age=merge(a,age.hl.num,by=c('year','age'),all=TRUE)
+age.hl.age$numage[is.na(age.hl.age$numage)==TRUE] = 0
+
+#nominal age comp of aged fish
+age.hl.acomp=summaryBy(numage~year+age,data=age.hl.age,FUN=sum)
+age.hl.acomp.tab=xtabs(numage.sum~year+age,data=age.hl.acomp)
+hl.age.acomp.nfish=rowSums(age.hl.acomp.tab)+0.0000001
+for(i in 1:length(hl.age.acomp.nfish)){
+  if (hl.age.acomp.nfish[i]>st.cutoff){hl.age.acomp.nfish[i]=hl.age.acomp.nfish[i]
+  } else{hl.age.acomp.nfish[i]=0.0000001;age.hl.acomp.tab[i,]=0}
+}
+hl.age.acomp.norm=age.hl.acomp.tab/hl.age.acomp.nfish
+
+#match length bins of matrices of wgted len comp with length comp of ages 
+#transform weighted length comp matrix into dataframe
+hl.wgt.rshp=melt(hl.norm.w)
+yr=rep(rownames(hl.norm.w),dim(hl.norm.w)[2])
+hl.wgt.rshp=cbind(yr,hl.wgt.rshp)
+names(hl.wgt.rshp)=c('year','tl3cm','lcomp')
+hl.wgt.rshp$tl3cm=as.numeric(as.character(hl.wgt.rshp$tl3cm))
+hl.wgt.rshp$year=as.numeric(as.character(hl.wgt.rshp$year))
+
+
+#transform lencomp of aged fish matrix into dataframe
+hl.age.lcomp.rshp=melt(hl.lcompaged.norm,id=c("year"))
+names(hl.age.lcomp.rshp)=c('year','tl3cm','lcompaged')
+## check that length bins match
+# min(hl.wgt.rshp$tl3cm)
+# max(hl.wgt.rshp$tl3cm)
+# min(hl.age.lcomp.rshp$tl3cm)
+# max(hl.age.lcomp.rshp$tl3cm)
+
+#begin weighting
+#merge both datasets together before division
+chih=merge(hl.wgt.rshp,hl.age.lcomp.rshp,by=c('year','tl3cm'),all=TRUE)
+#divide wgted comp by len comp (aged) to derive Chih's Reweighting factor
+chih$wgt=chih$lcomp/chih$lcompaged
+##remove NAs and InF
+chih$wgt[is.infinite(chih$wgt)] <- 0
+chih$wgt[is.na(chih$wgt)==TRUE] = 0
+#####no length comps for 1979-82 so, use nominal (wt=1) 
+chih$wgt[chih$year%in%c(1979,1980,1981,1982)]=1
+
+#combine age and chih reweighting data by year and len bin
+acomp.hl=merge(age.hl,chih,by=c('year','tl3cm'),all=TRUE)
+acomp.hl$wgt[is.na(acomp.hl$wgt)==TRUE] = 0
+
+#remove unneccessary columns
+acomp.hl=acomp.hl[,c(1,2,5,11)]
+
+##############################WEIGHTED AGE COMP
+acomp.hl.w=summaryBy(wgt~year+age,data=acomp.hl,FUN=sum)
+acomp.hl.w.tab=xtabs(wgt.sum~year+age,data=acomp.hl.w)
+acomp.hl.w.norm=acomp.hl.w.tab/rowSums(acomp.hl.w.tab)
+
+##pool weighted and unweighted age comps (0-20+)
+x=rowSums(acomp.hl.w.norm[,21:28])
+y=cbind(acomp.hl.w.norm[,1:20],x)
+colnames(y)=0:20
+acomp.hl.w.norm=y
+x=rowSums(hl.age.acomp.norm[,21:28])
+y=cbind(hl.age.acomp.norm[,1:20],x)
+colnames(y)=0:20
+hl.age.acomp.norm=y
+
+
+
+```
+**Table 5.** Commercial handline Sample size by State.
+```{r commhlacompSS,results='asis',echo=FALSE}
+age.hl$tmp=1
+age.hl.ss=xtabs(tmp~year+state,data=age.hl)
+age.hl.ss=as.data.frame.matrix(age.hl.ss)
+age.hl.ss$GaFL=age.hl.ss[,2]+age.hl.ss[,3]
+age.hl.ss=age.hl.ss[,c(-1,-2,-3)]
+age.hl.ss$Total=rowSums(age.hl.ss)
+table5=xtable(age.hl.ss,digits=0)
+print(table5,type="html")
+```
+
+**Table 6.**  Commercial handline weighted age compostion.
+```{r commhlacomp,results='asis',echo=FALSE}
+table6=xtable(acomp.hl.w.norm,digits=4)
+print(table6,type="html")
+```
+**Figure 3.**  Commercial handline weighted Age composition.  (1979-1982 unweighted due to lack of length data)
+```{r commHLacompPlots, echo=FALSE}
+#plot nominal age comp and weighted age comp
+windows(record=TRUE,width=7,height=10)
+par(mar=c(1.5, 2, 1, 1) + 0.1,oma=c(4,4,0,0))
+#cull years from unweighted age comp
+hl.age.acomp.norm=hl.age.acomp.norm[rownames(hl.age.acomp.norm)%in%rownames(acomp.hl.w.norm),]
+agebins=as.numeric(colnames(acomp.hl.w.norm))
+year=as.numeric(rownames(acomp.hl.w.norm))
+for(i in 1:dim(acomp.hl.w.norm)[1]){
+  plot(agebins,acomp.hl.w.norm[i,],type='n',ylim=c(0,max(acomp.hl.w.norm)),ylab='',xlab='Age')
+  text(5,.5,paste(year[i],'Handline',sep='-'),cex=1.2)
+  lines(agebins,hl.age.acomp.norm[i,],lwd=2,lty=3,col='darkorange')
+  lines(agebins,acomp.hl.w.norm[i,],lwd=2,lty=1,col='blue')
+    legend('topright',lty=c(3,1),lwd=c(2,2),col=c('darkorange','blue'),legend=c('unweighted','weighted'),cex=1.2,bty='n')
+}
+```
+
+
+
+
+
