@@ -26,9 +26,9 @@ library(reshape2)
 st.cutoff=0
 yr.cutoff=100  #annual number of fish ---not implemented yet
 #import data sets
-tip=read.csv('gag_tip_sa.csv',header=TRUE)
-hl.state.land=read.csv(file='hl.stateppt.csv',header=TRUE)#temporary until landings are received
-dv.state.land=read.csv(file='dv.stateppt.csv',header=TRUE)#temporary until landings are received
+tip=read.csv('W:/SEDAR/Updates2014/Gag/Comps/Commercial/gag_tip_sa.csv',header=TRUE)
+hl.state.land=read.csv(file='W:/SEDAR/Updates2014/Gag/Comps/Commercial/hl.stateppt.csv',header=TRUE)#temporary until landings are received
+dv.state.land=read.csv(file='W:/SEDAR/Updates2014/Gag/Comps/Commercial/dv.stateppt.csv',header=TRUE)#temporary until landings are received
 #remove unwanted columns
 tip=tip[,c(1,3,7,8,9,11)]
 #rename variables
@@ -50,6 +50,10 @@ tip=tip[tip$tlcm>29.4,] #as defined by SEDAR10_SAR1_SA_Gag, removes 15 records
 tip$tlcm[tip$tlcm<29]=29 #lower 
 tip$tlcm[tip$tlcm>122]=122 #upper 
 tip=tip[tip$year<2013,]
+#combine georgia and florida
+tip$state=as.character(tip$state)
+tip$state[tip$state=="GA"]="GAFL"
+tip$state[tip$state=="FL"]="GAFL"
 #define gears
 gears=levels(as.factor(tip$gear))
 #the following gear index values need to be updated for each species/data set
@@ -178,63 +182,63 @@ for(i in 1:length(sc.dv.nfish)){
 sc.dv.norm.unw=sc.dv.unw.tab/(sc.dv.nfish+0.00000001)
 sc.dv.w=sc.dv.norm.unw*dv.state.land[,3]
 
-#georgia handline (no data after 2005)
-ga.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='GA',],FUN=sum)
-ga.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=ga.hl.unw)
-ga.hl.unw.tab=as.data.frame.matrix(ga.hl.unw.tab)
-ga.hl.nfish=rowSums(ga.hl.unw.tab)
-for(i in 1:length(ga.hl.nfish)){
-  if (ga.hl.nfish[i]>st.cutoff){ga.hl.nfish[i]=ga.hl.nfish[i]
-                         } else{ga.hl.nfish[i]=0;ga.hl.unw.tab[i,]=0}
+#georgia + florida handline (no data after 2005)
+gafl.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='GAFL',],FUN=sum)
+gafl.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=gafl.hl.unw)
+gafl.hl.unw.tab=as.data.frame.matrix(gafl.hl.unw.tab)
+gafl.hl.nfish=rowSums(gafl.hl.unw.tab)
+for(i in 1:length(gafl.hl.nfish)){
+  if (gafl.hl.nfish[i]>st.cutoff){gafl.hl.nfish[i]=gafl.hl.nfish[i]
+                         } else{gafl.hl.nfish[i]=0;gafl.hl.unw.tab[i,]=0}
   }
-ga.hl.norm.unw=ga.hl.unw.tab/(ga.hl.nfish+0.00000001)
-ga.hl.w=ga.hl.norm.unw*hl.state.land[,4]
+gafl.hl.norm.unw=gafl.hl.unw.tab/(gafl.hl.nfish+0.00000001)
+gafl.hl.w=gafl.hl.norm.unw*hl.state.land[,4]
 
 #georgia diving
-ga.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='GA',],FUN=sum)
-ga.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=ga.dv.unw)
-ga.dv.unw.tab=as.data.frame.matrix(ga.dv.unw.tab)
-ga.dv.nfish=rowSums(ga.dv.unw.tab)
-for(i in 1:length(ga.dv.nfish)){
-  if (ga.dv.nfish[i]>st.cutoff){ga.dv.nfish[i]=ga.dv.nfish[i]
-                         } else{ga.dv.nfish[i]=0;ga.dv.unw.tab[i,]=0}
+gafl.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='GAFL',],FUN=sum)
+gafl.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=gafl.dv.unw)
+gafl.dv.unw.tab=as.data.frame.matrix(gafl.dv.unw.tab)
+gafl.dv.nfish=rowSums(gafl.dv.unw.tab)
+for(i in 1:length(gafl.dv.nfish)){
+  if (gafl.dv.nfish[i]>st.cutoff){gafl.dv.nfish[i]=gafl.dv.nfish[i]
+                         } else{gafl.dv.nfish[i]=0;gafl.dv.unw.tab[i,]=0}
   }
-ga.dv.norm.unw=ga.dv.unw.tab/(ga.dv.nfish+0.00000001)
-ga.dv.w=ga.dv.norm.unw*dv.state.land[,4]
+gafl.dv.norm.unw=gafl.dv.unw.tab/(gafl.dv.nfish+0.00000001)
+gafl.dv.w=gafl.dv.norm.unw*dv.state.land[,4]
 
-#florida handline 
-fl.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='FL',],FUN=sum)
-fl.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.hl.unw)
-fl.hl.unw.tab=as.data.frame.matrix(fl.hl.unw.tab)
-fl.hl.nfish=rowSums(fl.hl.unw.tab)
-for(i in 1:length(fl.hl.nfish)){
-  if (fl.hl.nfish[i]>st.cutoff){fl.hl.nfish[i]=fl.hl.nfish[i]
-                         } else{fl.hl.nfish[i]=0;fl.hl.unw.tab[i,]=0}
-  }
-fl.hl.norm.unw=fl.hl.unw.tab/(fl.hl.nfish+0.0000001)
-fl.hl.w=fl.hl.norm.unw*hl.state.land[,5]
-
-#florida diving
-fl.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='FL',],FUN=sum)
-fl.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.dv.unw)
-fl.dv.unw.tab=as.data.frame.matrix(fl.dv.unw.tab)
-fl.dv.nfish=rowSums(fl.dv.unw.tab)
-for(i in 1:length(fl.dv.nfish)){
-  if (fl.dv.nfish[i]>st.cutoff){fl.dv.nfish[i]=fl.dv.nfish[i]
-                         } else{fl.dv.nfish[i]=0;fl.dv.unw.tab[i,]=0}
-  }
-fl.dv.norm.unw=fl.dv.unw.tab/(fl.dv.nfish+0.00000001)
-fl.dv.w=fl.dv.norm.unw*dv.state.land[,5]
+# #florida handline 
+# fl.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='FL',],FUN=sum)
+# fl.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.hl.unw)
+# fl.hl.unw.tab=as.data.frame.matrix(fl.hl.unw.tab)
+# fl.hl.nfish=rowSums(fl.hl.unw.tab)
+# for(i in 1:length(fl.hl.nfish)){
+#   if (fl.hl.nfish[i]>st.cutoff){fl.hl.nfish[i]=fl.hl.nfish[i]
+#                          } else{fl.hl.nfish[i]=0;fl.hl.unw.tab[i,]=0}
+#   }
+# fl.hl.norm.unw=fl.hl.unw.tab/(fl.hl.nfish+0.0000001)
+# fl.hl.w=fl.hl.norm.unw*hl.state.land[,5]
+# 
+# #florida diving
+# fl.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='FL',],FUN=sum)
+# fl.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.dv.unw)
+# fl.dv.unw.tab=as.data.frame.matrix(fl.dv.unw.tab)
+# fl.dv.nfish=rowSums(fl.dv.unw.tab)
+# for(i in 1:length(fl.dv.nfish)){
+#   if (fl.dv.nfish[i]>st.cutoff){fl.dv.nfish[i]=fl.dv.nfish[i]
+#                          } else{fl.dv.nfish[i]=0;fl.dv.unw.tab[i,]=0}
+#   }
+# fl.dv.norm.unw=fl.dv.unw.tab/(fl.dv.nfish+0.00000001)
+# fl.dv.w=fl.dv.norm.unw*dv.state.land[,5]
 
 #combine state comps
 #handline
-hl.w=nc.hl.w+sc.hl.w+ga.hl.w+fl.hl.w
+hl.w=nc.hl.w+sc.hl.w+gafl.hl.w
 hl.norm.w=hl.w/rowSums(hl.w+0.0000001)
 hl.norm.w.trim=hl.norm.w[rowSums(hl.norm.w)>0,]
 hl.norm.unw.trim=hl.norm.unw[rowSums(hl.norm.w)>0,]
 
 #diving
-dv.w=nc.dv.w+sc.dv.w+ga.dv.w+fl.dv.w
+dv.w=nc.dv.w+sc.dv.w+gafl.dv.w
 dv.norm.w=dv.w/rowSums(dv.w+0.0000001)
 dv.norm.w.trim=dv.norm.w[rowSums(dv.norm.w)>0,]
 dv.norm.unw.trim=dv.norm.unw[rowSums(dv.norm.w)>0,]
@@ -243,13 +247,13 @@ dv.norm.unw.trim=dv.norm.unw[rowSums(dv.norm.w)>0,]
 #handline
 nc.hl.w.trim=nc.hl.w[rowSums(hl.norm.w)>0,]
 sc.hl.w.trim=sc.hl.w[rowSums(hl.norm.w)>0,]
-ga.hl.w.trim=ga.hl.w[rowSums(hl.norm.w)>0,]
-fl.hl.w.trim=fl.hl.w[rowSums(hl.norm.w)>0,]
+gafl.hl.w.trim=gafl.hl.w[rowSums(hl.norm.w)>0,]
+#fl.hl.w.trim=fl.hl.w[rowSums(hl.norm.w)>0,]
 #diving
 nc.dv.w.trim=nc.dv.w[rowSums(dv.norm.w)>0,]
 sc.dv.w.trim=sc.dv.w[rowSums(dv.norm.w)>0,]
-ga.dv.w.trim=ga.dv.w[rowSums(dv.norm.w)>0,]
-fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
+gafl.dv.w.trim=gafl.dv.w[rowSums(dv.norm.w)>0,]
+#fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
 
 
 
@@ -258,15 +262,15 @@ fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
 
 #create sample size tables
 #handlinernames=as.numeric(row.names(hl.norm.unw))
-hl.ss=cbind(nc.hl.nfish,sc.hl.nfish,ga.hl.nfish,fl.hl.nfish)
+hl.ss=cbind(nc.hl.nfish,sc.hl.nfish,gafl.hl.nfish)
 hl.ss=as.data.frame.matrix(hl.ss)
 hl.ss$total=rowSums(hl.ss)
-colnames(hl.ss)=c('NC','SC','GA','FL','Total')
+colnames(hl.ss)=c('NC','SC','GAFL','Total')
 
-dv.ss=cbind(nc.dv.nfish,sc.dv.nfish,ga.dv.nfish,fl.dv.nfish)
+dv.ss=cbind(nc.dv.nfish,sc.dv.nfish,gafl.dv.nfish)
 dv.ss=as.data.frame.matrix(dv.ss)
 dv.ss$total=rowSums(dv.ss)
-colnames(dv.ss)=c('NC','SC','GA','FL','Total')
+colnames(dv.ss)=c('NC','SC','GAFL','Total')
 #diving
 ```
 Tables
@@ -306,9 +310,9 @@ lines(lenbins,hl.norm.w.trim[i,],lwd=2)
 lines(lenbins,hl.norm.unw.trim[i,],lty=3,lwd=2)
 lines(lenbins,nc.hl.w.trim[i,],lty=3,lwd=2,col="green")
 lines(lenbins,sc.hl.w.trim[i,],lty=3,lwd=2,col="blue")
-lines(lenbins,ga.hl.w.trim[i,],lty=3,lwd=2,col="orange")
-lines(lenbins,fl.hl.w.trim[i,],lty=3,lwd=2,col="red")
-legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','green','blue','orange','red'),legend=c('weighted','unweighted','NC','SC','GA','FL'))
+lines(lenbins,gafl.hl.w.trim[i,],lty=3,lwd=2,col="orange")
+#lines(lenbins,fl.hl.w.trim[i,],lty=3,lwd=2,col="red")
+legend('topright',lty=c(1,3,3,3,3),lwd=c(2,2,2,2,2),col=c('black','black','green','blue','orange'),legend=c('weighted','unweighted','NC','SC','GAFL'))
 }
 ```
 
@@ -323,9 +327,9 @@ lines(lenbins,dv.norm.w.trim[i,],lwd=2)
 lines(lenbins,dv.norm.unw.trim[i,],lty=3,lwd=2)
 lines(lenbins,nc.dv.w.trim[i,],lty=3,lwd=2,col="green")
 lines(lenbins,sc.dv.w.trim[i,],lty=3,lwd=2,col="blue")
-lines(lenbins,ga.dv.w.trim[i,],lty=3,lwd=2,col="orange")
-lines(lenbins,fl.dv.w.trim[i,],lty=3,lwd=2,col="red")
-legend('topright',lty=c(1,3,3,3,3,3),lwd=c(2,2,2,2,2,2),col=c('black','black','green','blue','orange','red'),legend=c('weighted','unweighted','NC','SC','GA','FL'))
+lines(lenbins,gafl.dv.w.trim[i,],lty=3,lwd=2,col="orange")
+#lines(lenbins,fl.dv.w.trim[i,],lty=3,lwd=2,col="red")
+legend('topright',lty=c(1,3,3,3,3),lwd=c(2,2,2,2,2),col=c('black','black','green','blue','orange'),legend=c('weighted','unweighted','NC','SC','GAFL'))
 }
 ```
 **Age Composition**
