@@ -13,7 +13,7 @@ Tables
 -------------------------
 **Table 1.**  Commercial Handline sample size by state (number of fish).
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:27 2014 -->
+<!-- Thu Feb 27 15:57:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GAFL </TH> <TH> Total </TH>  </TR>
   <TR> <TD align="right"> 1983 </TD> <TD align="right"> 116 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 116 </TD> </TR>
@@ -50,7 +50,7 @@ Tables
 
 **Table 2.**  Commercial Diving sample size by state (number of fish).
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:27 2014 -->
+<!-- Thu Feb 27 15:57:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GAFL </TH> <TH> Total </TH>  </TR>
   <TR> <TD align="right"> 1987 </TD> <TD align="right"> 0 </TD> <TD align="right"> 11 </TD> <TD align="right"> 0 </TD> <TD align="right"> 11 </TD> </TR>
@@ -81,7 +81,7 @@ Tables
 
 **Table 3.**  Commercial Handline weighted length composition.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:27 2014 -->
+<!-- Thu Feb 27 15:57:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 29 </TH> <TH> 32 </TH> <TH> 35 </TH> <TH> 38 </TH> <TH> 41 </TH> <TH> 44 </TH> <TH> 47 </TH> <TH> 50 </TH> <TH> 53 </TH> <TH> 56 </TH> <TH> 59 </TH> <TH> 62 </TH> <TH> 65 </TH> <TH> 68 </TH> <TH> 71 </TH> <TH> 74 </TH> <TH> 77 </TH> <TH> 80 </TH> <TH> 83 </TH> <TH> 86 </TH> <TH> 89 </TH> <TH> 92 </TH> <TH> 95 </TH> <TH> 98 </TH> <TH> 101 </TH> <TH> 104 </TH> <TH> 107 </TH> <TH> 110 </TH> <TH> 113 </TH> <TH> 116 </TH> <TH> 119 </TH> <TH> 122 </TH>  </TR>
   <TR> <TD align="right"> 1983 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0259 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0172 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0517 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0603 </TD> <TD align="right"> 0.0690 </TD> <TD align="right"> 0.1034 </TD> <TD align="right"> 0.0690 </TD> <TD align="right"> 0.0776 </TD> <TD align="right"> 0.0517 </TD> <TD align="right"> 0.0603 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0172 </TD> <TD align="right"> 0.0345 </TD> <TD align="right"> 0.0431 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0086 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -119,7 +119,7 @@ Tables
 
 **Table 4.**  Commercial diving weighted length composition.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:27 2014 -->
+<!-- Thu Feb 27 15:57:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> 29 </TH> <TH> 32 </TH> <TH> 35 </TH> <TH> 38 </TH> <TH> 41 </TH> <TH> 44 </TH> <TH> 47 </TH> <TH> 50 </TH> <TH> 53 </TH> <TH> 56 </TH> <TH> 59 </TH> <TH> 62 </TH> <TH> 65 </TH> <TH> 68 </TH> <TH> 71 </TH> <TH> 74 </TH> <TH> 77 </TH> <TH> 80 </TH> <TH> 83 </TH> <TH> 86 </TH> <TH> 89 </TH> <TH> 92 </TH> <TH> 95 </TH> <TH> 98 </TH> <TH> 101 </TH> <TH> 104 </TH> <TH> 107 </TH> <TH> 110 </TH> <TH> 113 </TH> <TH> 116 </TH> <TH> 119 </TH> <TH> 122 </TH>  </TR>
   <TR> <TD align="right"> 1987 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0533 </TD> <TD align="right"> 0.0045 </TD> <TD align="right"> 0.3049 </TD> <TD align="right"> 0.0666 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0727 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.4860 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0120 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -164,7 +164,7 @@ Describe Chih method here....
 
 **Table 5.** Commercial handline ages, sample size by state.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:30 2014 -->
+<!-- Thu Feb 27 15:57:25 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GaFL </TH> <TH> Total </TH>  </TR>
   <TR> <TD align="right"> 1979 </TD> <TD align="right"> 0 </TD> <TD align="right"> 144 </TD> <TD align="right"> 0 </TD> <TD align="right"> 144 </TD> </TR>
@@ -197,7 +197,7 @@ Describe Chih method here....
 
 **Table 6.** Commercial diving ages, sample size by state.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:30 2014 -->
+<!-- Thu Feb 27 15:57:25 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> NC </TH> <TH> SC </TH> <TH> GAFL </TH> <TH> Total </TH>  </TR>
   <TR> <TD align="right"> 1992 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 1 </TD> </TR>
@@ -220,7 +220,7 @@ Describe Chih method here....
 
 **Table 7.**  Commercial handline weighted age compostion.
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:30 2014 -->
+<!-- Thu Feb 27 15:57:25 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> hl.age.n </TH> <TH> 0 </TH> <TH> 1 </TH> <TH> 2 </TH> <TH> 3 </TH> <TH> 4 </TH> <TH> 5 </TH> <TH> 6 </TH> <TH> 7 </TH> <TH> 8 </TH> <TH> 9 </TH> <TH> 10 </TH> <TH> 11 </TH> <TH> 12 </TH> <TH> 13 </TH> <TH> 14 </TH> <TH> 15 </TH> <TH> 16 </TH> <TH> 17 </TH> <TH> 18 </TH> <TH> 19 </TH> <TH> 20 </TH>  </TR>
   <TR> <TD align="right"> 1979 </TD> <TD align="right"> 144.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0069 </TD> <TD align="right"> 0.0625 </TD> <TD align="right"> 0.2292 </TD> <TD align="right"> 0.1944 </TD> <TD align="right"> 0.1250 </TD> <TD align="right"> 0.0833 </TD> <TD align="right"> 0.0486 </TD> <TD align="right"> 0.0694 </TD> <TD align="right"> 0.0556 </TD> <TD align="right"> 0.0278 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0069 </TD> <TD align="right"> 0.0208 </TD> <TD align="right"> 0.0278 </TD> <TD align="right"> 0.0139 </TD> <TD align="right"> 0.0278 </TD> </TR>
@@ -251,7 +251,7 @@ Describe Chih method here....
 
 **Table 8.**  Commercial diving weighted age compostion (years with 30 or more fish).
 <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-<!-- Thu Feb 27 15:20:30 2014 -->
+<!-- Thu Feb 27 15:57:26 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> dv.age.n </TH> <TH> 0 </TH> <TH> 1 </TH> <TH> 2 </TH> <TH> 3 </TH> <TH> 4 </TH> <TH> 5 </TH> <TH> 6 </TH> <TH> 7 </TH> <TH> 8 </TH> <TH> 9 </TH> <TH> 10 </TH> <TH> 11 </TH> <TH> 12 </TH> <TH> 13 </TH> <TH> 14 </TH> <TH> 15 </TH> <TH> 16 </TH> <TH> 17 </TH> <TH> 18 </TH> <TH> 19 </TH> <TH> 20 </TH>  </TR>
   <TR> <TD align="right"> 1994 </TD> <TD align="right"> 47.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0851 </TD> <TD align="right"> 0.0213 </TD> <TD align="right"> 0.0851 </TD> <TD align="right"> 0.2340 </TD> <TD align="right"> 0.1702 </TD> <TD align="right"> 0.2128 </TD> <TD align="right"> 0.1489 </TD> <TD align="right"> 0.0426 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> <TD align="right"> 0.0000 </TD> </TR>
@@ -264,6 +264,10 @@ Describe Chih method here....
 
 **Figure 3.**  Commercial handline weighted Age composition.  (1979-1982 unweighted due to lack of length data)
 ![plot of chunk commHLacompPlots](figure/commHLacompPlots1.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots2.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots3.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots4.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots5.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots6.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots7.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots8.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots9.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots10.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots11.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots12.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots13.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots14.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots15.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots16.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots17.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots18.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots19.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots20.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots21.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots22.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots23.png) ![plot of chunk commHLacompPlots](figure/commHLacompPlots24.png) 
+
+
+**Figure 4.**  Commercial diving weighted age composition weighted by state landings.  
+![plot of chunk commDVacompPlots](figure/commDVacompPlots1.png) ![plot of chunk commDVacompPlots](figure/commDVacompPlots2.png) ![plot of chunk commDVacompPlots](figure/commDVacompPlots3.png) ![plot of chunk commDVacompPlots](figure/commDVacompPlots4.png) ![plot of chunk commDVacompPlots](figure/commDVacompPlots5.png) ![plot of chunk commDVacompPlots](figure/commDVacompPlots6.png) 
 
 
 

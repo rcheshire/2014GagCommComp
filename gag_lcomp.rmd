@@ -575,6 +575,12 @@ dv.age.n=age.dv.ss$Total[age.dv.ss$Total>cull.dv.ages]
 dv.norm.a.unw.trim2=dv.norm.a.unw.trim[as.numeric(rownames(dv.norm.a.unw.trim))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
 dv.acomp.norm.w.trim2=dv.acomp.norm.w.trim[as.numeric(rownames(dv.acomp.norm.w.trim))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
 dv.acomp.norm.w.trim3=cbind(dv.age.n,dv.acomp.norm.w.trim2)
+
+#trim state-specific comps to match final 
+nc.dv.a.w.trim=nc.dv.a.w[as.numeric(rownames(nc.dv.a.w))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
+sc.dv.a.w.trim=sc.dv.a.w[as.numeric(rownames(sc.dv.a.w))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
+gafl.dv.a.w.trim=gafl.dv.a.w[as.numeric(rownames(gafl.dv.a.w))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
+
 ```
 **Table 7.**  Commercial handline weighted age compostion.
 ```{r commhlacomp,results='asis',echo=FALSE}
@@ -601,6 +607,25 @@ for(i in 1:dim(acomp.hl.w.norm2)[1]){
   lines(agebins,hl.age.acomp.norm2[i,],lwd=2,lty=3,col='darkorange')
   lines(agebins,acomp.hl.w.norm2[i,],lwd=2,lty=1,col='blue')
     legend('topright',lty=c(3,1),lwd=c(2,2),col=c('darkorange','blue'),legend=c('unweighted','weighted'),cex=1.2,bty='n')
+}
+```
+
+**Figure 4.**  Commercial diving weighted age composition weighted by state landings.  
+```{r commDVacompPlots, echo=FALSE}
+#plot nominal age comp and weighted age comp
+windows(record=TRUE,width=7,height=10)
+par(mar=c(1.5, 2, 1, 1) + 0.1,oma=c(4,4,0,0))
+agebins=as.numeric(colnames(dv.acomp.norm.w.trim2))
+year=as.numeric(rownames(dv.acomp.norm.w.trim2))
+for(i in 1:dim(dv.acomp.norm.w.trim2)[1]){
+  plot(agebins,dv.acomp.norm.w.trim2[i,],type='n',ylim=c(0,max(dv.acomp.norm.w.trim2)),ylab='',xlab='Age')
+  text(5,.5,paste(year[i],'Diving',sep='-'),cex=1.2)
+  lines(agebins,dv.norm.a.unw.trim2[i,],lwd=2,lty=3)
+  lines(agebins,dv.acomp.norm.w.trim2[i,],lwd=2,lty=1)
+lines(agebins,nc.dv.a.w.trim[i,],lty=3,lwd=2,col="green")
+lines(agebins,sc.dv.a.w.trim[i,],lty=3,lwd=2,col="blue")
+lines(agebins,gafl.dv.a.w.trim[i,],lty=3,lwd=2,col="orange")
+legend('topright',lty=c(1,3,3,3,3),lwd=c(2,2,2,2,2),col=c('black','black','green','blue','orange'),legend=c('weighted','unweighted','NC','SC','GAFL'))
 }
 ```
 
