@@ -285,13 +285,13 @@ print(table1,type="html")
 
 **Table 3.**  Commercial handline weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commhlwlcomp,results='asis',echo=FALSE}
-table1=xtable(hl.norm.w.out,digits=c(0,0,rep(5,dim(hl.norm.w.out)[2]-1)))
+table1=xtable(hl.norm.w.out,digits=c(0,0,rep(7,dim(hl.norm.w.out)[2]-1)))
 print(table1,type="html")
 ```
 
 **Table 4.**  Commercial diving weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commdvwlcomp,results='asis',echo=FALSE}
-table1=xtable(dv.norm.w.out,digits=c(0,0,rep(5,dim(dv.norm.w.out)[2]-1)))
+table1=xtable(dv.norm.w.out,digits=c(0,0,rep(7,dim(dv.norm.w.out)[2]-1)))
 print(table1,type="html")
 ```
 Figures
@@ -587,12 +587,12 @@ gafl.dv.a.w.trim=gafl.dv.a.w[as.numeric(rownames(gafl.dv.a.w))%in%as.numeric(row
 ```
 **Table 7.**  Commercial handline weighted age compostion (years with 47 or more fish).
 ```{r commhlacomp,results='asis',echo=FALSE}
-table7=xtable(acomp.hl.w.norm3,digits=c(0,0,rep(5,dim(acomp.hl.w.norm3)[2]-1)))
+table7=xtable(acomp.hl.w.norm3,digits=c(0,0,rep(7,dim(acomp.hl.w.norm3)[2]-1)))
 print(table7,type="html")
 ```
 **Table 8.**  Commercial diving weighted age compostion (years with 47 or more fish).
 ```{r commdvacomp,results='asis',echo=FALSE}
-table8=xtable(dv.acomp.norm.w.trim3,digits=c(0,0,rep(5,dim(dv.acomp.norm.w.trim3)[2]-1)))
+table8=xtable(dv.acomp.norm.w.trim3,digits=c(0,0,rep(7,dim(dv.acomp.norm.w.trim3)[2]-1)))
 print(table8,type="html")
 ```
 **Figure 3.**  Commercial handline weighted Age composition.  (1979-1982 unweighted due to lack of length data, years with greater than 46 fish)
