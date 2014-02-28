@@ -208,14 +208,15 @@ gafl.dv.w=gafl.dv.norm.unw*dv.state.land[,4]
 #combine state comps
 #handline
 hl.w=nc.hl.w+sc.hl.w+gafl.hl.w
-hl.norm.w=hl.w/rowSums(hl.w+0.0000001)
+hl.norm.w=hl.w
+  #hl.w/rowSums(hl.w+0.0000001)
 hl.norm.w.trim=hl.norm.w[rowSums(hl.norm.w)>0,]
 hl.norm.unw.trim=hl.norm.unw[rowSums(hl.norm.w)>0,]
 
 
 #diving
 dv.w=nc.dv.w+sc.dv.w+gafl.dv.w
-dv.norm.w=dv.w/rowSums(dv.w+0.0000001)
+dv.norm.w=dv.w/rowSums(dv.w)
 dv.norm.w.trim=dv.norm.w[rowSums(dv.norm.w)>0,]
 dv.norm.unw.trim=dv.norm.unw[rowSums(dv.norm.w)>0,]
 
@@ -284,13 +285,13 @@ print(table1,type="html")
 
 **Table 3.**  Commercial handline weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commhlwlcomp,results='asis',echo=FALSE}
-table1=xtable(hl.norm.w.out,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
+table1=xtable(hl.norm.w.out,digits=c(0,0,rep(5,dim(hl.norm.w.out)[2]-1)))
 print(table1,type="html")
 ```
 
 **Table 4.**  Commercial diving weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commdvwlcomp,results='asis',echo=FALSE}
-table1=xtable(dv.norm.w.out,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
+table1=xtable(dv.norm.w.out,digits=c(0,0,rep(5,dim(dv.norm.w.out)[2]-1)))
 print(table1,type="html")
 ```
 Figures
@@ -477,6 +478,7 @@ age.dv.all$num[is.na(age.dv.all$state)==TRUE] = 0
 ###begin unweighted age comp - diving
 dv.unw.a=summaryBy(num~year+age,data=age.dv.all,FUN=sum)
 dv.unw.a.tab=xtabs(num.sum~year+age,data=dv.unw.a)
+dv.unw.a.tab=dv.unw.a.tab[rowSums(dv.unw.a.tab)>0,]
 dv.nfish.a=rowSums(dv.unw.a.tab)+0.0000001
 for(i in 1:length(dv.nfish.a)){
   if (dv.nfish.a[i]>st.cutoff){dv.nfish.a[i]=dv.nfish.a[i]
@@ -537,8 +539,9 @@ for(i in 1:dim(gafl.dv.a.norm.unw)[1]){
 
 #combine diving state age comps
 dv.w.acomp=nc.dv.a.w+sc.dv.a.w+gafl.dv.a.w
-dv.acomp.norm.w=dv.w.acomp/rowSums(dv.w.acomp+0.0000001)
-dv.acomp.norm.w.trim=dv.acomp.norm.w[rowSums(dv.acomp.norm.w)>0,]
+dv.w.acomp.trim=dv.w.acomp[rowSums(dv.w.acomp)>0,]
+dv.acomp.norm.w=dv.w.acomp.trim/rowSums(dv.w.acomp.trim)
+dv.acomp.norm.w.trim=dv.acomp.norm.w
 dv.norm.a.unw.trim=dv.norm.a.unw[rowSums(dv.norm.a.unw)>0,]
 
 ```
@@ -584,12 +587,12 @@ gafl.dv.a.w.trim=gafl.dv.a.w[as.numeric(rownames(gafl.dv.a.w))%in%as.numeric(row
 ```
 **Table 7.**  Commercial handline weighted age compostion (years with 47 or more fish).
 ```{r commhlacomp,results='asis',echo=FALSE}
-table7=xtable(acomp.hl.w.norm3,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
+table7=xtable(acomp.hl.w.norm3,digits=c(0,0,rep(5,dim(acomp.hl.w.norm3)[2]-1)))
 print(table7,type="html")
 ```
 **Table 8.**  Commercial diving weighted age compostion (years with 47 or more fish).
 ```{r commdvacomp,results='asis',echo=FALSE}
-table8=xtable(dv.acomp.norm.w.trim3,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
+table8=xtable(dv.acomp.norm.w.trim3,digits=c(0,0,rep(5,dim(dv.acomp.norm.w.trim3)[2]-1)))
 print(table8,type="html")
 ```
 **Figure 3.**  Commercial handline weighted Age composition.  (1979-1982 unweighted due to lack of length data, years with greater than 46 fish)
