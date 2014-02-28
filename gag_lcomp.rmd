@@ -10,8 +10,7 @@ The 2010 shallow water spawning closure eliminated collections of lengths for Ja
 ```{r lendataprep,echo=FALSE,message=FALSE,warning=FALSE}
 ######################################################################
 # gag 2014 update assessment length composition
-# R. Cheshire 1/21/2014,  last edit 2/4/2014
-#######warning, to do: modify pooling  over upper and lower values
+# R. Cheshire 1/21/2014,  last edit 2/28/2014
 ######################################################################
 ######code to add years to comps....insert later
 # rnames=as.numeric(rownames(hl.norm.unw))
@@ -107,7 +106,6 @@ tip.dv=merge(a,tip.dv,by=c('state','year','tl3cm'),all=TRUE)
 tip.dv$num[is.na(tip.dv$num)==TRUE] = 0
 
 
-###add sample size tables here
 ############ Handline #############
 ############################
 ###begin unweighted length comp - handline
@@ -206,29 +204,6 @@ for(i in 1:length(gafl.dv.nfish)){
 gafl.dv.norm.unw=gafl.dv.unw.tab/(gafl.dv.nfish+0.00000001)
 gafl.dv.w=gafl.dv.norm.unw*dv.state.land[,4]
 
-# #florida handline 
-# fl.hl.unw=summaryBy(num~year+tl3cm,data=tip.hl[tip.hl$state=='FL',],FUN=sum)
-# fl.hl.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.hl.unw)
-# fl.hl.unw.tab=as.data.frame.matrix(fl.hl.unw.tab)
-# fl.hl.nfish=rowSums(fl.hl.unw.tab)
-# for(i in 1:length(fl.hl.nfish)){
-#   if (fl.hl.nfish[i]>st.cutoff){fl.hl.nfish[i]=fl.hl.nfish[i]
-#                          } else{fl.hl.nfish[i]=0;fl.hl.unw.tab[i,]=0}
-#   }
-# fl.hl.norm.unw=fl.hl.unw.tab/(fl.hl.nfish+0.0000001)
-# fl.hl.w=fl.hl.norm.unw*hl.state.land[,5]
-# 
-# #florida diving
-# fl.dv.unw=summaryBy(num~year+tl3cm,data=tip.dv[tip.dv$state=='FL',],FUN=sum)
-# fl.dv.unw.tab=xtabs(num.sum~year+tl3cm,data=fl.dv.unw)
-# fl.dv.unw.tab=as.data.frame.matrix(fl.dv.unw.tab)
-# fl.dv.nfish=rowSums(fl.dv.unw.tab)
-# for(i in 1:length(fl.dv.nfish)){
-#   if (fl.dv.nfish[i]>st.cutoff){fl.dv.nfish[i]=fl.dv.nfish[i]
-#                          } else{fl.dv.nfish[i]=0;fl.dv.unw.tab[i,]=0}
-#   }
-# fl.dv.norm.unw=fl.dv.unw.tab/(fl.dv.nfish+0.00000001)
-# fl.dv.w=fl.dv.norm.unw*dv.state.land[,5]
 
 #combine state comps
 #handline
@@ -236,6 +211,7 @@ hl.w=nc.hl.w+sc.hl.w+gafl.hl.w
 hl.norm.w=hl.w/rowSums(hl.w+0.0000001)
 hl.norm.w.trim=hl.norm.w[rowSums(hl.norm.w)>0,]
 hl.norm.unw.trim=hl.norm.unw[rowSums(hl.norm.w)>0,]
+
 
 #diving
 dv.w=nc.dv.w+sc.dv.w+gafl.dv.w
@@ -256,10 +232,6 @@ gafl.dv.w.trim=gafl.dv.w[rowSums(dv.norm.w)>0,]
 #fl.dv.w.trim=fl.dv.w[rowSums(dv.norm.w)>0,]
 
 
-
-
-###############end of comp weighting
-
 #create sample size tables
 #handlinernames=as.numeric(row.names(hl.norm.unw))
 hl.ss=cbind(nc.hl.nfish,sc.hl.nfish,gafl.hl.nfish)
@@ -271,7 +243,31 @@ dv.ss=cbind(nc.dv.nfish,sc.dv.nfish,gafl.dv.nfish)
 dv.ss=as.data.frame.matrix(dv.ss)
 dv.ss$total=rowSums(dv.ss)
 colnames(dv.ss)=c('NC','SC','GAFL','Total')
+
+
+#trim to years greater than yr.cutoff and create .out object with sample sizes
+cull.yr.hl=rownames(hl.ss)[hl.ss$Total>yr.cutoff]
+hl.norm.unw.trim=hl.norm.unw.trim[rownames(hl.norm.unw.trim)%in%cull.yr.hl,]
+hl.norm.w.trim=hl.norm.w.trim[rownames(hl.norm.w.trim)%in%cull.yr.hl,]
+cull.yr.dv=rownames(dv.ss)[dv.ss$Total>yr.cutoff]
+dv.norm.unw.trim=dv.norm.unw.trim[rownames(dv.norm.unw.trim)%in%cull.yr.dv,]
+dv.norm.w.trim=dv.norm.w.trim[rownames(dv.norm.w.trim)%in%cull.yr.dv,]
+hl.norm.w.out=cbind(hl.ss$Total[rownames(hl.ss)%in%cull.yr.hl],hl.norm.unw.trim)
+colnames(hl.norm.w.out)=c("n",colnames(hl.norm.w.out)[-1])
+dv.norm.w.out=cbind(dv.ss$Total[rownames(dv.ss)%in%cull.yr.dv],dv.norm.unw.trim)
+colnames(dv.norm.w.out)=c("n",colnames(dv.norm.w.out)[-1])
+
+#trim state specific comps to match based on annual sample sizes
+#handline
+nc.hl.w.trim=nc.hl.w.trim[rownames(nc.hl.w.trim)%in%cull.yr.hl,]
+sc.hl.w.trim=sc.hl.w.trim[rownames(sc.hl.w.trim)%in%cull.yr.hl,]
+gafl.hl.w.trim=gafl.hl.w.trim[rownames(gafl.hl.w.trim)%in%cull.yr.hl,]
+#fl.hl.w.trim=fl.hl.w[rowSums(hl.norm.w)>0,]
 #diving
+nc.dv.w.trim=nc.dv.w.trim[rownames(nc.dv.w.trim)%in%cull.yr.dv,]
+sc.dv.w.trim=sc.dv.w.trim[rownames(sc.dv.w.trim)%in%cull.yr.dv,]
+gafl.dv.w.trim=gafl.dv.w.trim[rownames(gafl.dv.w.trim)%in%cull.yr.dv,]
+
 ```
 Tables
 -------------------------
@@ -286,20 +282,20 @@ table1=xtable(dv.ss,digits=0)
 print(table1,type="html")
 ```
 
-**Table 3.**  Commercial Handline weighted length composition.
+**Table 3.**  Commercial handline weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commhlwlcomp,results='asis',echo=FALSE}
-table1=xtable(hl.norm.w.trim,digits=4)
+table1=xtable(hl.norm.w.out,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
 print(table1,type="html")
 ```
 
-**Table 4.**  Commercial diving weighted length composition.
+**Table 4.**  Commercial diving weighted length composition (n=number of fish, years with 100 or more fish).
 ```{r commdvwlcomp,results='asis',echo=FALSE}
-table1=xtable(dv.norm.w.trim,digits=4)
+table1=xtable(dv.norm.w.out,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
 print(table1,type="html")
 ```
 Figures
 -------------------------
-**Figure 1.**  Commercial Handline Length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
+**Figure 1.**  Commercial Handline Length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition (the exception is where a state is missing either landings or lengths when the other is present).  The vertical line represent the size limit.  
 ```{r  commhlplots,echo=FALSE}
 year=as.numeric(rownames(hl.norm.w.trim))
 for(i in 1:dim(hl.norm.w.trim)[1]){
@@ -316,7 +312,7 @@ legend('topright',lty=c(1,3,3,3,3),lwd=c(2,2,2,2,2),col=c('black','black','green
 }
 ```
 
-**Figure 2.**  Commercial diving length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition.  
+**Figure 2.**  Commercial diving length Composition; weighted by the numbers of fish by state and year, unweighted, and state specific weighted.  For most years the state-specific compositions will sum to the combined weighted composition (the exception is where a state is missing either landings or lengths when the other is present).  The vertical line represent the size limit.  
 ```{r commdvplots, echo=FALSE}
 year=as.numeric(rownames(dv.norm.w.trim))
 for(i in 1:dim(dv.norm.w.trim)[1]){
@@ -333,9 +329,11 @@ legend('topright',lty=c(1,3,3,3,3),lwd=c(2,2,2,2,2),col=c('black','black','green
 }
 ```
 **Age Composition**
-The commercial handline age compositions were adjusted for bias in sample collections using the Chih method as in SEDAR 10.  
-Describe Chih method here....
-The commercial diving age compositions were weighted by the state-specific landings in gutted pounds.  For some years the weighting had no effect since all the age data was from a single state.
+The commercial handline age compositions were adjusted for bias in sample collections using the Chih(2009) method as in SEDAR 10.  Lengths are recorded for each fish sampled for age. A reweighting value (RW) associated with the year (j) and length interval (i) of the age sample was assigned to each age sample by fishery as in the formula:  
+$RW_{ij}=\frac{LC_{ij}}{OL_{ij}/TO_{j}}$
+
+where $LC_{ij}$ is the weighted length composition value associated with the year j and length interval i for each aged fish $OL_{ij}$, is the number of aged samples in length interval i and year j , and $TO_j$ is the total number of aged samples in year j. This weighting corrects for a potential sampling bias of age samples relative to length samples (Chih, 2009). The numerator in this method differs slightly from the method used by Chih (2009) in that the length composition is weighted by the landings.
+The commercial diving age compositions were weighted by the state-specific landings in gutted pounds.  For some years the weighting had no effect because only one state contributed ages.
 ```{r agedataprep,echo=FALSE,message=FALSE,warning=FALSE}
 age.dat=read.csv(file='W:/SEDAR/Updates2014/Gag/Comps/Commercial/gag_ages_rinput.csv',header=TRUE)
 #remove unused cols
@@ -584,14 +582,14 @@ sc.dv.a.w.trim=sc.dv.a.w[as.numeric(rownames(sc.dv.a.w))%in%as.numeric(rownames(
 gafl.dv.a.w.trim=gafl.dv.a.w[as.numeric(rownames(gafl.dv.a.w))%in%as.numeric(rownames(age.dv.ss[age.dv.ss$Total>cull.dv.ages,])),]
 
 ```
-**Table 7.**  Commercial handline weighted age compostion (years with 30 or more fish).
+**Table 7.**  Commercial handline weighted age compostion (years with 47 or more fish).
 ```{r commhlacomp,results='asis',echo=FALSE}
-table7=xtable(acomp.hl.w.norm3,digits=4)
+table7=xtable(acomp.hl.w.norm3,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
 print(table7,type="html")
 ```
-**Table 8.**  Commercial diving weighted age compostion (years with 30 or more fish).
+**Table 8.**  Commercial diving weighted age compostion (years with 47 or more fish).
 ```{r commdvacomp,results='asis',echo=FALSE}
-table8=xtable(dv.acomp.norm.w.trim3,digits=4)
+table8=xtable(dv.acomp.norm.w.trim3,digits=c(0,0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4))
 print(table8,type="html")
 ```
 **Figure 3.**  Commercial handline weighted Age composition.  (1979-1982 unweighted due to lack of length data, years with greater than 46 fish)
