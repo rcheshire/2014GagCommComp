@@ -56,13 +56,13 @@ tip$state[tip$state=="FL"]="GAFL"
 #define gears
 gears=levels(as.factor(tip$gear))
 #the following gear index values need to be updated for each species/data set
-gear_hl=gears[c(4,5,6,7,9,12,13,14,15)]
+gear_hl=gears[c(5,6,7,8,10,13,14,15,16)]
 #[1] "LINES HAND"                    "LINES LONG SET WITH HOOKS"    
 #[3] "LINES LONG, REEF FISH"         "LINES POWER TROLL OTHER"      
 #[5] "OTTER TRAWL BOTTOM, FISH"      "REEL, ELECTRIC OR HYDRAULIC"  
 #[7] "REEL, MANUAL"                  "ROD AND REEL"                 
 #[9] "ROD AND REEL, ELECTRIC (HAND)"
-gear_dv=gears[c(2,16)]  #[1] "BY HAND, DIVING GEAR" "SPEARS" 
+gear_dv=gears[c(3,17)]  #[1] "BY HAND, DIVING GEAR" "SPEARS" 
 #gears not included: vertical buoy gear, cast nets, not coded, 
 #     pots and traps (fish), pots and traps (include,
 
