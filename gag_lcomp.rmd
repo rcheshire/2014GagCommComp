@@ -250,12 +250,16 @@ colnames(dv.ss)=c('NC','SC','GAFL','Total')
 cull.yr.hl=rownames(hl.ss)[hl.ss$Total>yr.cutoff]
 hl.norm.unw.trim=hl.norm.unw.trim[rownames(hl.norm.unw.trim)%in%cull.yr.hl,]
 hl.norm.w.trim=hl.norm.w.trim[rownames(hl.norm.w.trim)%in%cull.yr.hl,]
+#normalize to 1
+hl.norm.w.trim=hl.norm.w.trim/apply(hl.norm.w.trim,1,FUN=sum)
 cull.yr.dv=rownames(dv.ss)[dv.ss$Total>yr.cutoff]
 dv.norm.unw.trim=dv.norm.unw.trim[rownames(dv.norm.unw.trim)%in%cull.yr.dv,]
 dv.norm.w.trim=dv.norm.w.trim[rownames(dv.norm.w.trim)%in%cull.yr.dv,]
-hl.norm.w.out=cbind(hl.ss$Total[rownames(hl.ss)%in%cull.yr.hl],hl.norm.unw.trim)
+#normalize to 1
+dv.norm.w.trim=dv.norm.w.trim/apply(dv.norm.w.trim,1,FUN=sum)
+hl.norm.w.out=cbind(hl.ss$Total[rownames(hl.ss)%in%cull.yr.hl],hl.norm.w.trim)
 colnames(hl.norm.w.out)=c("n",colnames(hl.norm.w.out)[-1])
-dv.norm.w.out=cbind(dv.ss$Total[rownames(dv.ss)%in%cull.yr.dv],dv.norm.unw.trim)
+dv.norm.w.out=cbind(dv.ss$Total[rownames(dv.ss)%in%cull.yr.dv],dv.norm.w.trim)
 colnames(dv.norm.w.out)=c("n",colnames(dv.norm.w.out)[-1])
 
 #trim state specific comps to match based on annual sample sizes
